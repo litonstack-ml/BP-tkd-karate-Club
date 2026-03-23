@@ -1,0 +1,46 @@
+/* Navbar hover */
+.navbar-link {
+    transition: color 0.3s;
+    cursor: pointer;
+}
+
+.navbar-link:hover {
+    color: #facc15;
+    /* Tailwind yellow-400 */
+}
+
+/* Hero button hover */
+.hero-button {
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.hero-button:hover {
+    transform: scale(1.05);
+}
+
+/* Sports cards hover */
+.sport-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.sport-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Gallery images hover */
+.gallery-img {
+    transition: transform 0.3s;
+}
+
+.gallery-img:hover {
+    transform: scale(1.05);
+}
+
+/* Mobile tweaks */
+@media (max-width: 768px) {
+    .navbar-link {
+        display: block;
+        margin: 0.5rem 0;
+    }
+}
