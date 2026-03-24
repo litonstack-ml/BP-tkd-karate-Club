@@ -1,7 +1,51 @@
 "use client";
+import { useState } from "react";
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaFacebook, FaInstagram, FaYoutube } from "react-icons/fa";
 
 export default function Contact() {
+  // State for storing from data
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    message: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+
+  // Function to handle input changes
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  // Function to add form
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const response = await fetch("/api/admission", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert("Congratulations! Your information has been submitted successfully");
+        setFormData({ name: "", phone: "", email: "", message: "" }); // Clear the form
+      } else {
+        alert("Sorry,something went wrong.Please try again");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Unable to connect to the server।");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <section id="contact" className="py-24 bg-slate-950 text-white relative">
       <div className="max-w-7xl mx-auto px-6">
@@ -11,12 +55,10 @@ export default function Contact() {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12 items-start">
-
           {/* Left Side: Contact Info */}
           <div className="space-y-8">
             <div className="bg-slate-900/50 p-8 rounded-3xl border border-white/5 shadow-xl">
               <h3 className="text-2xl font-bold mb-6 text-yellow-400">Contact Information</h3>
-
               <div className="space-y-6">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-red-600/20 rounded-full flex items-center justify-center text-red-600">
@@ -44,7 +86,7 @@ export default function Contact() {
                   </div>
                   <div>
                     <p className="text-sm text-gray-400 uppercase font-bold">Location</p>
-                    <p className="text-lg font-bold">Rajarbagh Police Line,Dhaka, Bangladesh</p>
+                    <p className="text-lg font-bold">Rajarbagh Police Line, Dhaka, Bangladesh</p>
                   </div>
                 </div>
               </div>
@@ -61,19 +103,52 @@ export default function Contact() {
           {/* Right Side: Quick Message Form */}
           <div className="bg-white rounded-3xl p-8 md:p-10 shadow-2xl">
             <h3 className="text-2xl font-bold mb-6 text-slate-900">Send us a Message</h3>
-            <form className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid md:grid-cols-2 gap-4">
-                <input type="text" placeholder="Your Name" className="w-full p-4 bg-gray-100 rounded-xl text-slate-900 outline-none focus:ring-2 focus:ring-red-600 transition" required />
-                <input type="tel" placeholder="Phone Number" className="w-full p-4 bg-gray-100 rounded-xl text-slate-900 outline-none focus:ring-2 focus:ring-red-600 transition" required />
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Your Name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="w-full p-4 bg-gray-100 rounded-xl text-slate-900 outline-none focus:ring-2 focus:ring-red-600 transition"
+                  required
+                />
+                <input
+                  type="tel"
+                  name="phone"
+                  placeholder="Phone Number"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  className="w-full p-4 bg-gray-100 rounded-xl text-slate-900 outline-none focus:ring-2 focus:ring-red-600 transition"
+                  required
+                />
               </div>
-              <input type="email" placeholder="Email Address" className="w-full p-4 bg-gray-100 rounded-xl text-slate-900 outline-none focus:ring-2 focus:ring-red-600 transition" />
-              <textarea placeholder="Describe yourself" rows="4" className="w-full p-4 bg-gray-100 rounded-xl text-slate-900 outline-none focus:ring-2 focus:ring-red-600 transition resize-none"></textarea>
-              <button className="w-full bg-red-600 hover:bg-red-700 text-white font-black py-4 rounded-xl transition-all uppercase tracking-widest shadow-lg shadow-red-600/30 active:scale-95">
-                Send Message
+              <input
+                type="email"
+                name="email"
+                placeholder="Email Address"
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full p-4 bg-gray-100 rounded-xl text-slate-900 outline-none focus:ring-2 focus:ring-red-600 transition"
+                required
+              />
+              <textarea
+                name="message"
+                placeholder="Describe yourself"
+                rows="4"
+                value={formData.message}
+                onChange={handleChange}
+                className="w-full p-4 bg-gray-100 rounded-xl text-slate-900 outline-none focus:ring-2 focus:ring-red-600 transition resize-none"
+              ></textarea>
+              <button
+                disabled={loading}
+                className="w-full bg-red-600 hover:bg-red-700 text-white font-black py-4 rounded-xl transition-all uppercase tracking-widest shadow-lg shadow-red-600/30 active:scale-95 disabled:bg-gray-400"
+              >
+                {loading ? "Sending..." : "Send Message"}
               </button>
             </form>
           </div>
-
         </div>
       </div>
     </section>
