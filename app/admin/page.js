@@ -7,7 +7,7 @@ export default function AdminDashboard() {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const ADMIN_PASSWORD = "tkd112255";
+  const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
 
   const handleLogin = async (e) => {
     e.preventDefault();
